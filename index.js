@@ -15,10 +15,21 @@ async function main() {
         password: process.env.DB_PASS,
         database: process.env.DB_NAME,
     });
-  
+
     const promisePool = pool.promise();
 
-    app.listen(process.env.PORT || 5000);
+    try {
+        await promisePool.getConnection();
+        console.log('Successful database connection!');
+    } catch (e) {
+        throw e;
+    }
+
+    const port = process.env.SERVER_PORT || 5000;
+
+    app.listen(port, () => {
+        console.log('Server running on port', port);
+    });
 
     app.use(bodyParser.urlencoded({
         extended: true
@@ -29,7 +40,12 @@ async function main() {
     app.use(express.static('public'));
 
     app.get('/api/getProduct/:id', async (req, res) => {
-        const [rows] = await promisePool.execute('SELECT * FROM `products` where id = ?', [req.params.id]);
-        res.send(rows);
+        try {
+            const [rows] = await promisePool.execute('SELECT * FROM `products` where id = ?', [req.params.id]);
+            res.send(rows);
+        } catch (e) {
+            console.error(e);
+            res.send([]);
+        }
     });
 }
