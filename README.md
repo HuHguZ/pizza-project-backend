@@ -37,8 +37,11 @@ Then exec sql-file on server:
  * ```$ mysql -u username -p password innoscripta_pizza < /path/to/your/initializeDB.sql```
  <br>Alternatively if you have already logged in to the server, just run:
  * ```mysql>source /path/to/your/file.sql```<br>
- * Or copy the contents of this file, log in to the server and paste
+ * Or copy the contents of this file, log in to the server and paste.
  
+ ### Telegram notifications
+ To receive notifications about user orders, you should change ```TELEGRAM_BOT_TOKEN``` and ```BOT_PASSWORD``` in ```.env``` file or leave the same if you want to use my bot.<br>
+ Then send the command ```/start <BOT_PASSWORD>``` to the created bot so it saves you to the database and will notify you about user orders.
  ### Deployment
  
  Run this command using any available process manager:<br>
