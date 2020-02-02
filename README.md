@@ -25,6 +25,8 @@ rename ```.env.example``` to ```.env``` and fill it. File structure:
 
 ```
 SERVER_PORT=5000
+TELEGRAM_BOT_TOKEN=987765750:AAE1EXVGMTrhaihu6QC-RHEgwurDUpYhQAY
+BOT_PASSWORD=00c5f2a5f00a4deda3dd5ad1e44d9463486ea3e0974c0cdf10e1b759910a6b45
 DB_HOST=localhost
 DB_USER=username
 DB_PASS=password

@@ -1,12 +1,14 @@
 CREATE DATABASE IF NOT EXISTS innoscripta_pizza default charset utf8;
 USE innoscripta_pizza;
+
 CREATE TABLE IF NOT EXISTS product_types (
-    id int AUTO_INCREMENT PRIMARY KEY,
+    id int AUTO_INCREMENT PRIMARY KEY NOT NULL,
     type varchar(255) NOT NULL
 );
 INSERT INTO product_types (type) VALUES ('пицца');
+
 CREATE TABLE IF NOT EXISTS products (
-    id int AUTO_INCREMENT PRIMARY KEY,
+    id int AUTO_INCREMENT PRIMARY KEY NOT NULL,
     type_id int NOT NULL,
     name varchar(255) NOT NULL,
     description varchar(1000) NOT NULL,
@@ -15,6 +17,7 @@ CREATE TABLE IF NOT EXISTS products (
     price float NOT NULL,
     FOREIGN KEY (type_id) REFERENCES product_types (id)
 );
+
 INSERT INTO products (type_id, name, description, img_name, img_alt, price) VALUES (
     1,
     'Пицца Дьябло',
@@ -78,4 +81,24 @@ INSERT INTO products (type_id, name, description, img_name, img_alt, price) VALU
     'pizza9.jpg',
     'Пицца Полло 30 см на тонком тесте',
     10
+);
+
+CREATE TABLE IF NOT EXISTS carts (
+    record_id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    cart_id int NOT NULL,
+    user_id int NOT NULL,
+    product_id int NOT NULL,
+    product_count int NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES products (id)
+);
+
+CREATE TABLE IF NOT EXISTS users (
+    id int PRIMARY KEY NOT NULL,
+    phone varchar(16) NOT NULL,
+    delivery_address varchar(255)  NOT NULL,
+    cart_id int NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS telegram_notifications (
+    telegram_user_id int PRIMARY KEY NOT NULL
 );
