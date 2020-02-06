@@ -11,7 +11,7 @@ async function main() {
 
     const mysql = require('mysql2/promise');
 
-    const connection = await mysql.createConnection({
+    let connection = await mysql.createConnection({
         host: process.env.DB_HOST, 
         user: process.env.DB_USER, 
         password: process.env.DB_PASS,
@@ -41,12 +41,24 @@ async function main() {
 
     app.use(express.static('public'));
 
+    let memoizedProducts = {};
+
     app.get('/api/getProduct/:id', async (req, res) => {
         try {
             const [rows] = await connection.execute('select * from `products` where id = ?', [req.params.id]);
+            memoizedProducts[req.params.id] = rows;
             res.send(rows);
         } catch (e) {
+            connection = await mysql.createConnection({
+                host: process.env.DB_HOST, 
+                user: process.env.DB_USER, 
+                password: process.env.DB_PASS,
+                database: process.env.DB_NAME,
+            });
             console.error(e);
+            if (memoizedProducts[req.params.id]) {
+                return res.send(memoizedProducts[req.params.id]);
+            }
             res.send([]);
         }
     });
